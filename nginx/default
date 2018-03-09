@@ -1,0 +1,23 @@
+server {
+    listen 80;
+    listen [::]:80;
+
+    root /home/deploy/wordpress-deploy/current;
+    index index.php;
+
+    server_name wordpress-deploy.dev;
+
+    location / {
+        #try_files $uri $uri/ =404;
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php7.0-fpm.sock;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
